@@ -21,3 +21,7 @@
 	width: 600px;
 	margin: 30px auto;
 }
+
+footer p {
+	text-align: center;
+}
