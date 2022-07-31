@@ -1,0 +1,23 @@
+.container {
+	margin: 0 auto;
+	width: 800px;
+	text-align: center;
+	border: 5px solid blueviolet;
+	padding: 15px;
+}
+
+.sun {
+	font-size: 200px;
+	color: blueviolet;
+}
+
+.moon-section,
+.info {
+	width: 400px;
+	margin: 30px auto;
+}
+
+.info {
+	width: 600px;
+	margin: 30px auto;
+}
