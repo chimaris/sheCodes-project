@@ -1,6 +1,13 @@
 const searchForm = document.querySelector("#searchForm");
 const cityElement = document.querySelector("#cityName");
 const dateElement = document.querySelector("#date");
+const iconElement = document.querySelector("#weather-icon");
+const descriptionElement = document.querySelector("#weather-description");
+const updatedTimeElement = document.querySelector("#updated-time");
+const pressureElement = document.querySelector("#pressure");
+const feelsLikeElement = document.querySelector("#feels-like");
+const humidityElement = document.querySelector("#humidity");
+const speedElement = document.querySelector("#speed");
 
 const tempElement = document.querySelector("#temp");
 const toCelsius = document.querySelector("#toCelsius");
@@ -10,7 +17,7 @@ const currentLocation = document.querySelector("#current-location");
 
 const apiKey = "b0d417b9a05ce1bce437f53ce8e8f48d";
 
-let temperature = 17;
+let temperature;
 
 function formatDate(date) {
 	const days = ["Sun", "Mon", "Tue", "Wed", "Thur", "Fri", "Sat"];
@@ -30,11 +37,27 @@ function formatDate(date) {
 		currentMins = `0${currentMins}`;
 	}
 
-	return `${currentDay}, ${currentDate} ${currentMonth} ${currentYear} -- ${currentHours}:${currentMins} `;
+	return `Date: ${currentDay}, ${currentDate} ${currentMonth} ${currentYear} | Time: ${currentHours}:${currentMins} `;
 }
 
 const date = new Date();
 dateElement.innerHTML = formatDate(date);
+
+function formatTime(time) {
+	console.log(time);
+	let date = new Date(time);
+	let currentHours = date.getHours();
+	let currentMins = date.getMinutes();
+
+	if (currentHours < 10) {
+		currentHours = `0${currentHours}`;
+	}
+	if (currentMins < 10) {
+		currentMins = `0${currentMins}`;
+	}
+
+	return `${currentHours}:${currentMins} `;
+}
 
 const searchCity = (e) => {
 	e.preventDefault();
@@ -44,13 +67,16 @@ const searchCity = (e) => {
 
 	axios.get(apiUrl).then((res) => {
 		console.log(res.data);
-		tempElement.innerHTML = Math.round(res.data.main.temp);
+		temperature = res.data.main.temp;
+		tempElement.innerHTML = Math.round(temperature);
 		cityElement.innerHTML = res.data.name;
+		iconElement.src = `http://openweathermap.org/img/wn/${res.data.weather[0].icon}@2x.png`;
+		descriptionElement.innerHTML = res.data.weather[0].description;
+		updatedTimeElement.innerHTML = formatTime(res.data.dt * 1000);
 	});
 };
 
-function searchByLocation(e) {
-	e.preventDefault();
+function searchByLocation() {
 	navigator.geolocation.getCurrentPosition((position) => {
 		console.log(position);
 		let lat = position.coords.latitude;
@@ -61,24 +87,37 @@ function searchByLocation(e) {
 
 		function showTemp(res) {
 			console.log(res.data);
-			tempElement.innerHTML = Math.round(res.data.main.temp);
+			temperature = res.data.main.temp;
+			tempElement.innerHTML = Math.round(temperature);
 			cityElement.innerHTML = res.data.name;
+			iconElement.src = `http://openweathermap.org/img/wn/${res.data.weather[0].icon}@2x.png`;
+			descriptionElement.innerHTML = res.data.weather[0].description;
+			updatedTimeElement.innerHTML = formatTime(res.data.dt * 1000);
+			pressureElement.innerHTML = res.data.main.pressure;
+			feelsLikeElement.innerHTML = Math.round(res.data.main.feels_like);
+			humidityElement.innerHTML = res.data.main.humidity;
+			speedElement.innerHTML = Math.round(res.data.wind.speed);
 		}
 		axios.get(apiUrl).then(showTemp);
 	});
 }
 
+searchByLocation();
+
+function searchByLocationHandler(e) {
+	e.preventDefault();
+
+	searchByLocation();
+}
+
 searchForm.addEventListener("submit", searchCity);
-currentLocation.addEventListener("click", searchByLocation);
+currentLocation.addEventListener("click", searchByLocationHandler);
 
 // Celsius and Fahrenheit Conversion
-const celsiusTemperature = Math.round(temperature);
-const fahrenheitTemperature = Math.round((temperature * 9) / 5 + 32);
-
 toCelsius.addEventListener("click", () => {
-	tempElement.innerHTML = celsiusTemperature;
+	tempElement.innerHTML = Math.round(temperature);
 });
 
 toFahrenheit.addEventListener("click", () => {
-	tempElement.innerHTML = fahrenheitTemperature;
+	tempElement.innerHTML = Math.round((temperature * 9) / 5 + 32);
 });

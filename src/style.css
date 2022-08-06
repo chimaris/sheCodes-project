@@ -2,24 +2,49 @@
 	margin: 0 auto;
 	width: 800px;
 	text-align: center;
-	border: 5px solid blueviolet;
+	border: 5px solid violet;
 	padding: 15px;
 }
 
+form label {
+	width: 70%;
+}
+
+.btn-primary {
+	background-color: rgb(236, 175, 236);
+	border-color: rgb(236, 175, 236);
+	color: black;
+}
+
+h1.cityName {
+	letter-spacing: 0.5rem;
+}
+
 .sun {
-	font-size: 200px;
-	color: blueviolet;
+	background-color: rgb(236, 175, 236);
+	border-radius: 50% 10% 50% 30%;
+}
+
+#weather-description {
+	text-transform: capitalize;
 }
 
 .moon-section,
 .info {
 	width: 400px;
-	margin: 30px auto;
+	margin: 15px auto;
 }
 
 .info {
 	width: 600px;
-	margin: 30px auto;
+	background-color: rgb(236, 175, 236);
+	padding-top: 15px;
+	font-weight: 700;
+	letter-spacing: 0.2rem;
+}
+
+.info span {
+	font-weight: normal;
 }
 
 footer p {
