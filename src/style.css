@@ -20,6 +20,10 @@ h1.cityName {
 	letter-spacing: 0.5rem;
 }
 
+h3 {
+	font-size: unset;
+}
+
 .sun {
 	background-color: rgb(236, 175, 236);
 	border-radius: 50% 10% 50% 30%;
@@ -47,6 +51,19 @@ h1.cityName {
 	font-weight: normal;
 }
 
+.forecast-section {
+	font-size: 20px;
+}
+
+.forecast-section + .day-div {
+	border-right: 2px solid black;
+}
+
 footer p {
 	text-align: center;
+}
+
+.active {
+	color: blue;
+	cursor: pointer;
 }

@@ -9,6 +9,8 @@ const feelsLikeElement = document.querySelector("#feels-like");
 const humidityElement = document.querySelector("#humidity");
 const speedElement = document.querySelector("#speed");
 
+const forecastSectionElement = document.querySelector("#forecast-section");
+
 const tempElement = document.querySelector("#temp");
 const toCelsius = document.querySelector("#toCelsius");
 const toFahrenheit = document.querySelector("#toFahrenheit");
@@ -37,7 +39,7 @@ function formatDate(date) {
 		currentMins = `0${currentMins}`;
 	}
 
-	return `Date: ${currentDay}, ${currentDate} ${currentMonth} ${currentYear} | Time: ${currentHours}:${currentMins} `;
+	return `<strong>Date:</strong> ${currentDay}, ${currentDate} ${currentMonth} ${currentYear} | <strong>Time:</strong>  ${currentHours}:${currentMins} `;
 }
 
 const date = new Date();
@@ -59,6 +61,35 @@ function formatTime(time) {
 	return `${currentHours}:${currentMins} `;
 }
 
+function formatDay(day) {
+	let date = new Date(day);
+	const days = ["Sun", "Mon", "Tue", "Wed", "Thur", "Fri", "Sat"];
+
+	let currentDay = days[date.getDay()];
+	return currentDay;
+}
+
+function dailyForecast(lat, lon) {
+	const apiUrl = `https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&cnt=${6}&appid=${apiKey}`;
+	forecastSectionElement.innerHTML = "";
+	axios.get(apiUrl).then((res) => {
+		console.log(res.data.daily);
+
+		res.data.daily.forEach((forecast, index) => {
+			if (index < 6) {
+				forecastSectionElement.innerHTML += `
+				<div class="col-2 day-div">
+					<h3>
+						<span class="day">${formatDay(forecast.dt * 1000)}</span> <br /> 
+						<span>${Math.round(forecast.temp.max)}<sup>o</sup>/${Math.round(forecast.temp.min)}<sup>o</sup></span>
+					</h3>
+					<img src="http://openweathermap.org/img/wn/${forecast.weather[0].icon}@2x.png" width="50%" />
+				</div>`;
+			}
+		});
+	});
+}
+
 const searchCity = (e) => {
 	e.preventDefault();
 	const city = document.querySelector("#city").value;
@@ -73,6 +104,8 @@ const searchCity = (e) => {
 		iconElement.src = `http://openweathermap.org/img/wn/${res.data.weather[0].icon}@2x.png`;
 		descriptionElement.innerHTML = res.data.weather[0].description;
 		updatedTimeElement.innerHTML = formatTime(res.data.dt * 1000);
+
+		dailyForecast(res.data.coord.lat, res.data.coord.lon);
 	});
 };
 
@@ -99,6 +132,8 @@ function searchByLocation() {
 			speedElement.innerHTML = Math.round(res.data.wind.speed);
 		}
 		axios.get(apiUrl).then(showTemp);
+
+		dailyForecast(lat, lon);
 	});
 }
 
@@ -116,8 +151,12 @@ currentLocation.addEventListener("click", searchByLocationHandler);
 // Celsius and Fahrenheit Conversion
 toCelsius.addEventListener("click", () => {
 	tempElement.innerHTML = Math.round(temperature);
+	toCelsius.classList.remove("active");
+	toFahrenheit.classList.add("active");
 });
 
 toFahrenheit.addEventListener("click", () => {
 	tempElement.innerHTML = Math.round((temperature * 9) / 5 + 32);
+	toFahrenheit.classList.remove("active");
+	toCelsius.classList.add("active");
 });
