@@ -78,7 +78,7 @@ function dailyForecast(lat, lon) {
 		res.data.daily.forEach((forecast, index) => {
 			if (index < 6) {
 				forecastSectionElement.innerHTML += `
-				<div class="col-2 day-div">
+				<div class="col-sm-2 day-div">
 					<h3>
 						<span class="day">${formatDay(forecast.dt * 1000)}</span> <br /> 
 						<span>${Math.round(forecast.temp.max)}<sup>o</sup>/${Math.round(forecast.temp.min)}<sup>o</sup></span>

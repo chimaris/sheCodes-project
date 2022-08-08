@@ -1,9 +1,12 @@
+* {
+	box-sizing: border-box;
+}
 .container {
 	margin: 0 auto;
-	width: 800px;
+	width: 70%;
 	text-align: center;
 	border: 5px solid violet;
-	padding: 15px;
+	padding: 20px;
 }
 
 form label {
@@ -27,6 +30,7 @@ h3 {
 .sun {
 	background-color: rgb(236, 175, 236);
 	border-radius: 50% 10% 50% 30%;
+	width: 50%;
 }
 
 #weather-description {
@@ -40,7 +44,7 @@ h3 {
 }
 
 .info {
-	width: 600px;
+	width: 90%;
 	background-color: rgb(236, 175, 236);
 	padding-top: 15px;
 	font-weight: 700;
@@ -53,6 +57,7 @@ h3 {
 
 .forecast-section {
 	font-size: 20px;
+	background-color: #fffafa;
 }
 
 .forecast-section + .day-div {
